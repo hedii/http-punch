@@ -1,0 +1,33 @@
+{
+    "name": "hedii/http-punch",
+    "description": "A php library to punch an http endpoint",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "hedii",
+            "email": "hedi.chaibs@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "require-dev": {
+        "laravel/lumen-framework": "^5.4",
+        "phpunit/phpunit": "^6.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hedii\\HttpPunch\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Hedii\\HttpPunch\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    }
+}
