@@ -129,6 +129,19 @@ class HttpPunchTest extends TestCase
         $this->assertSame('Failed binding local connection end', $response['message']);
     }
 
+    /** @test */
+    public function it_should_set_the_headers_on_the_request(): void
+    {
+        $puncher = new HttpPunch();
+        $response = $puncher
+            ->setHeaders(['foo' => 'bar', 'bar' => 'baz'])
+            ->punch($this->url('/endpoint-headers'));
+
+        // see the test server route: if the response status code is 418, the
+        // headers has correctly been set
+        $this->assertSame(Response::HTTP_I_AM_A_TEAPOT, $response['status_code']);
+    }
+
     /**
      * Build a test url from a given endpoint path.
      *

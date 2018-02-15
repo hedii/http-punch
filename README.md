@@ -6,8 +6,6 @@ Http punch is a php library for punching (visiting) an http url.
 
 It can be used to check whether an host is online or offline, to check a server response time, to hit a cron job url, to hit a webhook url, etc...
 
-It has a simple api (only ~~one~~ two methods!).
-
 ## Table of contents
 
 - [Table of contents](#table-of-contents)
@@ -68,6 +66,9 @@ $result = $puncher->punch('http://example.com', 'post', ['foo' => 'bar']);
 
 // set the outgoing ip address (it uses CURLOPT_INTERFACE behind the scenes) and perform a get request
 $result = $puncher->setIp('192.160.0.101')->punch('http://example.com');
+
+// set an array of request headers and perform a get request
+$result = $puncher->setHeaders(['foo' => 'bar'])->punch('http://example.com');
 ```
 
 The result of this method is an array with with the http punch report information. The value of `success` indicates if the website is has successfully responded to the request:

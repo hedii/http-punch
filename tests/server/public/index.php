@@ -2,6 +2,7 @@
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
@@ -20,6 +21,14 @@ $app->router->post('/post', function () {
 
 $app->router->get('/endpoint-ok', function () {
     return new JsonResponse(['message' => 'response ok']);
+});
+
+$app->router->get('/endpoint-headers', function (Request $request) {
+    if ($request->header('foo') === 'bar' && $request->header('bar') === 'baz') {
+        return new JsonResponse(['message' => 'response ok'], Response::HTTP_I_AM_A_TEAPOT);
+    } else {
+        return new JsonResponse(['message' => 'internal error'], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
 });
 
 $app->router->get('/endpoint-forbidden', function () {

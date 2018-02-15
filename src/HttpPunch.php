@@ -34,6 +34,9 @@ class HttpPunch
     /** @var string */
     private $ip = '0.0.0.0';
 
+    /** @var array */
+    private $headers = [];
+
     /**
      * HttpPunch constructor.
      *
@@ -55,6 +58,19 @@ class HttpPunch
     public function setIp(string $ip): self
     {
         $this->ip = $ip;
+
+        return $this;
+    }
+
+    /**
+     * Set the request headers.
+     *
+     * @param array $headers
+     * @return \Hedii\HttpPunch\HttpPunch
+     */
+    public function setHeaders(array $headers): self
+    {
+        $this->headers = $headers;
 
         return $this;
     }
@@ -120,6 +136,7 @@ class HttpPunch
             'connect_timeout' => $this->connectionTimeout,
             'timeout' => $this->requestTimeout,
             'verify' => false,
+            'headers' => $this->headers,
             'curl' => [
                 CURLOPT_INTERFACE => $this->ip
             ]
