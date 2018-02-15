@@ -6,7 +6,7 @@ Http punch is a php library for punching (visiting) an http url.
 
 It can be used to check whether an host is online or offline, to check a server response time, to hit a cron job url, to hit a webhook url, etc...
 
-It has a simple api (only one method!).
+It has a simple api (only ~~one~~ two methods!).
 
 ## Table of contents
 
@@ -65,6 +65,9 @@ $result = $puncher->punch('http://example.com', 'post');
 
 // perform a post request with a given body as an array
 $result = $puncher->punch('http://example.com', 'post', ['foo' => 'bar']);
+
+// set the outgoing ip address (it uses CURLOPT_INTERFACE behind the scenes) and perform a get request
+$result = $puncher->setIp('192.160.0.101')->punch('http://example.com');
 ```
 
 The result of this method is an array with with the http punch report information. The value of `success` indicates if the website is has successfully responded to the request:
@@ -83,13 +86,13 @@ Notice that the url field contains the effective url (in case of redirect respon
 
 ### The result array
 
-| Field           | Type    | Description                                           |
-| --------------- | ------- | ----------------------------------------------------- |
-| `url`           | string  | The effective url                                     |
-| `success`       | boolean | Whether the http punch is successful or not           |
-| `status_code`   | integer | The http response status code                         |
-| `message`       | string  | The http response message or the client error message |
-| `transfer_time` | float   | The transfer time in seconds                          |
+| Field           | Type          | Description                                                     |
+| --------------- | ------------- | --------------------------------------------------------------- |
+| `url`           | string        | The effective url                                               |
+| `success`       | boolean       | Whether the http punch is successful or not                     |
+| `status_code`   | null\|integer | The http response status code or null in case of a client error |
+| `message`       | string        | The http response message or the client error message           |
+| `transfer_time` | float         | The transfer time in seconds                                    |
 
 ## Testing
 

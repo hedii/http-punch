@@ -20,16 +20,19 @@ class HttpPunch
     private $effectiveUri;
 
     /** @var bool */
-    private $success;
+    private $success = false;
 
-    /** @var int */
-    private $statusCode;
+    /** @var null|int */
+    private $statusCode = null;
 
     /** @var string */
     private $message;
 
     /** @var float */
     private $transferTime = 0;
+
+    /** @var string */
+    private $ip = '0.0.0.0';
 
     /**
      * HttpPunch constructor.
@@ -41,6 +44,19 @@ class HttpPunch
     {
         $this->requestTimeout = $requestTimeout;
         $this->connectionTimeout = $connectionTimeout;
+    }
+
+    /**
+     * Set the outgoing ip address.
+     *
+     * @param string $ip
+     * @return \Hedii\HttpPunch\HttpPunch
+     */
+    public function setIp(string $ip): self
+    {
+        $this->ip = $ip;
+
+        return $this;
     }
 
     /**
@@ -72,20 +88,16 @@ class HttpPunch
             $this->statusCode = $e->getResponse()->getStatusCode();
             $this->message = $e->getResponse()->getReasonPhrase();
         } catch (RequestException $e) {
-            $this->success = false;
             if ($e->hasResponse()) {
                 $this->statusCode = $e->getResponse()->getStatusCode();
                 $this->message = $e->getResponse()->getReasonPhrase();
             } else {
-                $this->statusCode = 500;
                 $this->message = isset($e->getHandlerContext()['errno'])
                     ? curl_strerror($e->getHandlerContext()['errno'])
                     : $e->getMessage();
             }
         } catch (Exception $e) {
-            $this->success = false;
-            $this->statusCode = 500;
-            $this->message = 'Internal Server Error';
+            $this->message = 'Unknown Error';
         }
 
         return [
@@ -107,7 +119,10 @@ class HttpPunch
         return new Client([
             'connect_timeout' => $this->connectionTimeout,
             'timeout' => $this->requestTimeout,
-            'verify' => false
+            'verify' => false,
+            'curl' => [
+                CURLOPT_INTERFACE => $this->ip
+            ]
         ]);
     }
 }
